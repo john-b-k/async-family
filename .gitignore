@@ -1,0 +1,14 @@
+.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
+Servers/
+.recommenders/*
+.metadata/*
+.springBeans
+.classpath
+target/*
+.settings
+.settings/*
+/target/*
+/target/
+.project
