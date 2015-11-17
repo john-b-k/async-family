@@ -1,5 +1,6 @@
 package com.simple.asyncexams.simple;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,10 +20,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestRootContextConfig.class,
-										TestServletContextConfig.class,
+//Only one AsyncConfigurer may exist
+@ContextConfiguration(classes = {/*TestRootContextConfig.class,
+										TestServletContextConfig.class,*/
 										RootContextConfig.class,
 										ServletContextConfig.class}	)
+@WebAppConfiguration
 public class TestFakeNotification {
 	@Inject
 	private EntryPointController entryPoint;
@@ -30,25 +33,21 @@ public class TestFakeNotification {
 	private NotificationService notiService;
 	@Inject
 	private WebApplicationContext context;
-	@Inject
+//	@Inject
 	private MockMvc mockMvc;
 	
 	@Before
 	public void setUp() throws Exception{
-		System.out.println(1);
-		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();//standaloneSetup(new EntryPointController()).build();
-		System.out.println(2);
-//		webAppContextSetup(this.applicationContext).build();
 	}
 	@Test
-	public void test2() throws Exception {
+	public void _1비동기메서드간접호출_컨테이너없이동작_어싱크는미작동() throws Exception {
 		mockMvc.perform(get("/fakeNoti")).andExpect(status().isOk());
 	}
-//	@Test
-//	public void test(){
-//		System.out.println("dd");
-//		assertThat(notiService, is(notNullValue()));
-//		notiService.sendNotification("subject", "message", null);
-//	}
+	@Test
+	public void _2비동기메서드직접호출_어싱크는미작동(){
+		System.out.println("비동기메서드직접호출_어싱크는미작동");
+		assertTrue(notiService!= null);
+		notiService.sendNotification("subject", "message", null);
+	}
 }
